@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
 import apiClient from '../../../api/client';
 import type { ApiResponse } from '../../../types/api';
+import { getErrorMessage } from '../../../lib/utils';
 
 interface VendorProfile {
   id: string;
@@ -35,15 +37,27 @@ function useMyProfile() {
   });
 }
 
+function useUpdateProfile() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: FormData) => apiClient.patch('/vendor/profile', payload),
+    onSuccess: () => {
+      toast.success('Profil berhasil disimpan.');
+      qc.invalidateQueries({ queryKey: ['vendor', 'my-profile'] });
+    },
+    onError: (e) => toast.error(getErrorMessage(e)),
+  });
+}
+
 export function VendorProfilePage() {
   const { data: vendor, isLoading } = useMyProfile();
-  const [saved, setSaved] = [false, (_: boolean) => {}];
+  const updateMutation = useUpdateProfile();
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isDirty, isSubmitting },
+    formState: { errors, isDirty },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   // Populate form when vendor data loads
@@ -58,13 +72,8 @@ export function VendorProfilePage() {
     }
   }, [vendor, reset]);
 
-  async function onSubmit(data: FormData) {
-    // PATCH /vendor/profile needs backend endpoint
-    alert(
-      'Endpoint PATCH /api/v1/vendor/profile belum tersedia di backend.\n\n' +
-      'Data yang akan disimpan:\n' +
-      JSON.stringify(data, null, 2)
-    );
+  function onSubmit(data: FormData) {
+    updateMutation.mutate(data, { onSuccess: () => reset(data) });
   }
 
   if (isLoading) {
@@ -149,10 +158,10 @@ export function VendorProfilePage() {
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            disabled={isSubmitting || !isDirty}
+            disabled={updateMutation.isPending || !isDirty}
             className="rounded-2xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition"
           >
-            {isSubmitting ? 'Menyimpan...' : 'Simpan Perubahan'}
+            {updateMutation.isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
           </button>
           {isDirty && (
             <button
@@ -164,10 +173,6 @@ export function VendorProfilePage() {
             </button>
           )}
         </div>
-
-        <p className="text-xs text-amber-700 rounded-2xl bg-amber-50 border border-amber-100 px-4 py-3">
-          ⚠️ Endpoint <code className="font-mono">PATCH /api/v1/vendor/profile</code> perlu ditambahkan ke backend untuk menyimpan perubahan profil.
-        </p>
       </form>
     </div>
   );

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import apiClient from '../../../api/client';
 import type { ApiResponse } from '../../../types/api';
+import { getErrorMessage } from '../../../lib/utils';
 
 interface Schedule {
   id?: string;
@@ -46,11 +48,31 @@ function useSchedules(vendorSlug?: string) {
   });
 }
 
+function useUpdateSchedules() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (schedules: Schedule[]) =>
+      apiClient.patch('/vendor/schedules', {
+        schedules: schedules.map((s) => ({
+          day_of_week: s.day_of_week,
+          open_time: s.open_time,
+          close_time: s.close_time,
+          is_closed: s.is_closed,
+        })),
+      }),
+    onSuccess: () => {
+      toast.success('Jadwal berhasil disimpan.');
+      qc.invalidateQueries({ queryKey: ['vendor', 'schedules'] });
+    },
+    onError: (e) => toast.error(getErrorMessage(e)),
+  });
+}
+
 export function VendorSchedulePage() {
   const { data: vendorSlug } = useVendorSlug();
   const { data: schedules = DEFAULT_SCHEDULES, isLoading } = useSchedules(vendorSlug);
   const [local, setLocal] = useState<Schedule[] | null>(null);
-  const [saved, setSaved] = useState(false);
+  const updateMutation = useUpdateSchedules();
 
   const display = local ?? schedules;
 
@@ -58,18 +80,10 @@ export function VendorSchedulePage() {
     setLocal((prev) =>
       (prev ?? schedules).map((s) => (s.day_of_week === dow ? { ...s, ...patch } : s))
     );
-    setSaved(false);
   }
 
   function handleSave() {
-    // POST /vendor/schedules needs backend endpoint
-    alert(
-      'Endpoint POST /vendor/schedules belum tersedia di backend.\n\n' +
-      'Perlu ditambahkan: PATCH /api/v1/vendor/schedules\n' +
-      'Body: { schedules: [...] }\n\n' +
-      JSON.stringify(display, null, 2)
-    );
-    setSaved(true);
+    updateMutation.mutate(display, { onSuccess: () => setLocal(null) });
   }
 
   return (
@@ -81,11 +95,6 @@ export function VendorSchedulePage() {
             Atur hari dan jam buka usaha Anda. Slot booking akan dibuat otomatis berdasarkan jadwal ini.
           </p>
         </div>
-        {saved && (
-          <span className="rounded-2xl bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
-            ✓ Tersimpan
-          </span>
-        )}
       </div>
 
       {isLoading ? (
@@ -143,25 +152,20 @@ export function VendorSchedulePage() {
       <div className="flex gap-3">
         <button
           onClick={handleSave}
-          disabled={isLoading}
+          disabled={isLoading || updateMutation.isPending}
           className="rounded-2xl bg-indigo-600 px-6 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
         >
-          Simpan Jadwal
+          {updateMutation.isPending ? 'Menyimpan...' : 'Simpan Jadwal'}
         </button>
         {local && (
           <button
-            onClick={() => { setLocal(null); setSaved(false); }}
+            onClick={() => setLocal(null)}
             className="rounded-2xl border border-slate-200 px-6 py-2 text-sm text-slate-600 hover:bg-slate-50"
           >
             Reset
           </button>
         )}
       </div>
-
-      <p className="text-xs text-amber-700 bg-amber-50 rounded-2xl px-4 py-3 border border-amber-100">
-        ⚠️ Endpoint <code className="font-mono">PATCH /api/v1/vendor/schedules</code> belum ada di backend.
-        Perlu ditambahkan agar perubahan jadwal bisa disimpan ke database.
-      </p>
     </div>
   );
 }
