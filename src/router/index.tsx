@@ -1,5 +1,11 @@
-import { RootRoute, Route, Router } from '@tanstack/react-router';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  redirect,
+} from '@tanstack/react-router';
 import App from '../App';
+import { LoginPage } from '../features/auth/LoginPage';
 import { AdminDashboardPage } from '../features/dashboard/pages/AdminDashboardPage';
 import { AdminVendorsPage } from '../features/dashboard/pages/AdminVendorsPage';
 import { AdminBookingsPage } from '../features/dashboard/pages/AdminBookingsPage';
@@ -14,96 +20,146 @@ import { VendorReviewsPage } from '../features/vendors/pages/VendorReviewsPage';
 import { VendorProfilePage } from '../features/vendors/pages/VendorProfilePage';
 import { VendorPayoutsPage } from '../features/vendors/pages/VendorPayoutsPage';
 import { NotFoundPage } from '../features/dashboard/pages/NotFoundPage';
+import { isAuthenticated } from '../lib/auth';
 
-const rootRoute = new RootRoute({
-  component: App,
+// ── Root ─────────────────────────────────────────────────────────────────────
+
+const rootRoute = createRootRoute({ component: App });
+
+// ── Login (public) ───────────────────────────────────────────────────────────
+
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: 'login',
+  component: LoginPage,
+  beforeLoad: () => {
+    if (isAuthenticated()) throw redirect({ to: '/admin/dashboard' });
+  },
 });
 
-const adminDashboardRoute = new Route({
+// ── Auth guard helper ─────────────────────────────────────────────────────────
+
+function requireAuth() {
+  if (!isAuthenticated()) throw redirect({ to: '/login' });
+}
+
+// ── Admin routes ──────────────────────────────────────────────────────────────
+
+const adminDashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'admin/dashboard',
   component: AdminDashboardPage,
+  beforeLoad: requireAuth,
 });
 
-const adminVendorsRoute = new Route({
+const adminVendorsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'admin/vendors',
   component: AdminVendorsPage,
+  beforeLoad: requireAuth,
 });
 
-const adminBookingsRoute = new Route({
+const adminBookingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'admin/bookings',
   component: AdminBookingsPage,
+  beforeLoad: requireAuth,
 });
 
-const adminCategoriesRoute = new Route({
+const adminCategoriesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'admin/categories',
   component: AdminCategoriesPage,
+  beforeLoad: requireAuth,
 });
 
-const adminUsersRoute = new Route({
+const adminUsersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'admin/users',
   component: AdminUsersPage,
+  beforeLoad: requireAuth,
 });
 
-const vendorDashboardRoute = new Route({
+// ── Vendor routes ─────────────────────────────────────────────────────────────
+
+const vendorDashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/dashboard',
   component: VendorDashboardPage,
+  beforeLoad: requireAuth,
 });
 
-const vendorBookingsRoute = new Route({
+const vendorBookingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/bookings',
   component: VendorBookingsPage,
+  beforeLoad: requireAuth,
 });
 
-const vendorCalendarRoute = new Route({
+const vendorCalendarRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/calendar',
   component: VendorCalendarPage,
+  beforeLoad: requireAuth,
 });
 
-const vendorServicesRoute = new Route({
+const vendorServicesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/services',
   component: VendorServicesPage,
+  beforeLoad: requireAuth,
 });
 
-const vendorScheduleRoute = new Route({
+const vendorScheduleRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/schedule',
   component: VendorSchedulePage,
+  beforeLoad: requireAuth,
 });
 
-const vendorReviewsRoute = new Route({
+const vendorReviewsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/reviews',
   component: VendorReviewsPage,
+  beforeLoad: requireAuth,
 });
 
-const vendorProfileRoute = new Route({
+const vendorProfileRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/profile',
   component: VendorProfilePage,
+  beforeLoad: requireAuth,
 });
 
-const vendorPayoutsRoute = new Route({
+const vendorPayoutsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'vendor/payouts',
   component: VendorPayoutsPage,
+  beforeLoad: requireAuth,
 });
 
-const notFoundRoute = new Route({
+// ── Index redirect ────────────────────────────────────────────────────────────
+
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: isAuthenticated() ? '/admin/dashboard' : '/login' });
+  },
+  component: () => null,
+});
+
+const notFoundRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '*',
   component: NotFoundPage,
 });
 
+// ── Router ────────────────────────────────────────────────────────────────────
+
 const routeTree = rootRoute.addChildren([
+  indexRoute,
+  loginRoute,
   adminDashboardRoute,
   adminVendorsRoute,
   adminBookingsRoute,
@@ -120,10 +176,8 @@ const routeTree = rootRoute.addChildren([
   notFoundRoute,
 ]);
 
-export const router = new Router({ routeTree });
+export const router = createRouter({ routeTree });
 
 declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
+  interface Register { router: typeof router }
 }
