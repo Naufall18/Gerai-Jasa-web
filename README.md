@@ -1,6 +1,6 @@
-# Bookly Web Dashboard
+# Gerai Jasa Web Dashboard
 
-React 18 + TypeScript admin & vendor dashboard for **Bookly** — a multi-vendor booking platform for the Indonesian market.
+React 18 + TypeScript admin & vendor dashboard for **Gerai Jasa** — a multi-vendor booking platform for the Indonesian market.
 
 ## Tech Stack
 
@@ -68,8 +68,8 @@ src/
 
 ```bash
 # Clone
-git clone https://github.com/Naufall18/bookly-web.git
-cd bookly-web
+git clone https://github.com/Naufall18/geraijasa-web.git
+cd geraijasa-web
 
 # Install dependencies
 npm install
@@ -109,8 +109,8 @@ VITE_MIDTRANS_CLIENT_KEY=
 
 ## Related Repositories
 
-- **Backend API**: [bookly-backend](https://github.com/Naufall18/bookly-backend) — Laravel 11 REST API
-- **Mobile App**: [bookly-mobile](https://github.com/Naufall18/bookly-mobile) — Flutter 3.x (Customer App)
+- **Backend API**: [geraijasa-backend](https://github.com/Naufall18/geraijasa-backend) — Laravel 11 REST API
+- **Mobile App**: [geraijasa-mobile](https://github.com/Naufall18/geraijasa-mobile) — Flutter 3.x (Customer App)
 
 ## License
 
