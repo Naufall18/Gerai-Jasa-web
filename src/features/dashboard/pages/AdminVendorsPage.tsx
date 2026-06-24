@@ -63,7 +63,7 @@ export function AdminVendorsPage() {
                 <tr key={i}>
                   {Array.from({ length: 5 }).map((__, j) => (
                     <td key={j} className="px-6 py-4">
-                      <div className="h-4 animate-pulse rounded bg-slate-100" />
+                      <div className="h-4 rounded gj-skeleton" />
                     </td>
                   ))}
                 </tr>

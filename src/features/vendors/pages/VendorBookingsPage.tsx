@@ -1,17 +1,10 @@
 import { useState } from 'react';
 import { useVendorBookings, useConfirmBooking, useCompleteBooking } from '../../bookings/hooks/useBookings';
 import { PageHeader } from '../../../components/layout/PageHeader';
+import { StatusBadge } from '../../../components/ui/StatusBadge';
 import type { Booking } from '../../../types/models';
 
 type StatusFilter = 'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
-
-const STATUS_LABELS: Record<string, { label: string; cls: string }> = {
-  pending:   { label: 'Menunggu',   cls: 'bg-amber-50 text-amber-700' },
-  confirmed: { label: 'Dikonfirmasi', cls: 'bg-blue-50 text-blue-700' },
-  completed: { label: 'Selesai',    cls: 'bg-emerald-50 text-emerald-700' },
-  cancelled: { label: 'Dibatalkan', cls: 'bg-red-50 text-red-700' },
-  in_progress: { label: 'Berlangsung', cls: 'bg-indigo-50 text-indigo-700' },
-};
 
 function formatRupiah(amount: number) {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount);
@@ -64,7 +57,7 @@ export function VendorBookingsPage() {
       {isLoading && (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-28 animate-pulse gj-card bg-slate-100" />
+            <div key={i} className="h-28 gj-card gj-skeleton" />
           ))}
         </div>
       )}
@@ -87,7 +80,6 @@ export function VendorBookingsPage() {
       {!isLoading && bookings.length > 0 && (
         <div className="space-y-4">
           {bookings.map((booking) => {
-            const statusInfo = STATUS_LABELS[booking.status] ?? { label: booking.status, cls: 'bg-slate-50 text-slate-700' };
             return (
               <div
                 key={booking.id}
@@ -99,9 +91,7 @@ export function VendorBookingsPage() {
                       <p className="font-mono text-sm font-bold text-indigo-600">
                         {booking.booking_code}
                       </p>
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusInfo.cls}`}>
-                        {statusInfo.label}
-                      </span>
+                      <StatusBadge status={booking.status} dot />
                     </div>
                     <p className="font-semibold text-slate-900">
                       {/* @ts-ignore — relations loaded from API */}

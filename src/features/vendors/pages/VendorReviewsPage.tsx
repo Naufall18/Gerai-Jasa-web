@@ -91,7 +91,7 @@ export function VendorReviewsPage() {
       {isLoading && (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-32 animate-pulse gj-card bg-slate-100" />
+            <div key={i} className="h-32 gj-card gj-skeleton" />
           ))}
         </div>
       )}
