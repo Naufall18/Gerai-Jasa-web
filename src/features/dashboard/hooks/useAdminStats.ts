@@ -61,7 +61,24 @@ export function useAdminDashboardStats() {
         .filter((b) => b.status === 'completed')
         .reduce((sum, b) => sum + Number(b.total_price), 0);
 
-      return { totalBookings, totalVendors, revenue, recentBookings: bookings.slice(0, 10) };
+      // Tren 7 hari terakhir (diturunkan dari data yang sudah diambil)
+      const trend: { label: string; count: number }[] = [];
+      const byDate: Record<string, { label: string; count: number }> = {};
+      const now = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(now.getDate() - i);
+        const key = d.toISOString().slice(0, 10);
+        const bucket = { label: d.toLocaleDateString('id-ID', { weekday: 'short' }), count: 0 };
+        byDate[key] = bucket;
+        trend.push(bucket);
+      }
+      bookings.forEach((b) => {
+        const key = (b.created_at ?? '').slice(0, 10);
+        if (byDate[key]) byDate[key].count += 1;
+      });
+
+      return { totalBookings, totalVendors, revenue, recentBookings: bookings.slice(0, 10), trend };
     },
     staleTime: 60_000,
   });
