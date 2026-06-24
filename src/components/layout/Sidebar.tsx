@@ -2,6 +2,7 @@ import { Link, useRouterState } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '../../api/client';
 import { clearToken, getRole } from '../../lib/auth';
+import { Icons, type IconName } from '../ui/icons';
 import type { ApiResponse } from '../../types/api';
 import type { User } from '../../types/models';
 
@@ -18,41 +19,40 @@ function useCurrentUser() {
   });
 }
 
-const ADMIN_SECTIONS = [
-  {
-    title: 'Overview',
-    items: [
-      { label: '📊 Dashboard',  to: '/admin/dashboard' },
-    ],
-  },
+type NavItem = { icon: IconName; label: string; to: string };
+type NavSection = { title: string; items: NavItem[] };
+
+const ADMIN_SECTIONS: NavSection[] = [
+  { title: 'Overview', items: [{ icon: 'dashboard', label: 'Dashboard', to: '/admin/dashboard' }] },
   {
     title: 'Manajemen',
     items: [
-      { label: '🏪 Vendor',     to: '/admin/vendors' },
-      { label: '📅 Booking',    to: '/admin/bookings' },
-      { label: '🗂️ Kategori',   to: '/admin/categories' },
-      { label: '👥 Pengguna',   to: '/admin/users' },
+      { icon: 'store', label: 'Vendor', to: '/admin/vendors' },
+      { icon: 'calendar', label: 'Booking', to: '/admin/bookings' },
+      { icon: 'category', label: 'Kategori', to: '/admin/categories' },
+      { icon: 'users', label: 'Pengguna', to: '/admin/users' },
     ],
   },
 ];
 
-const VENDOR_SECTIONS = [
+const VENDOR_SECTIONS: NavSection[] = [
   {
     title: 'Vendor',
     items: [
-      { label: '📊 Dashboard',    to: '/vendor/dashboard' },
-      { label: '📅 Booking Masuk', to: '/vendor/bookings' },
-      { label: '🗓️ Kalender',     to: '/vendor/calendar' },
-      { label: '🛎️ Layanan',      to: '/vendor/services' },
-      { label: '⏰ Jadwal',        to: '/vendor/schedule' },
-      { label: '⭐ Ulasan',        to: '/vendor/reviews' },
-      { label: '🏪 Profil Usaha',  to: '/vendor/profile' },
-      { label: '💰 Pendapatan',    to: '/vendor/payouts' },
+      { icon: 'dashboard', label: 'Dashboard', to: '/vendor/dashboard' },
+      { icon: 'bell', label: 'Booking Masuk', to: '/vendor/bookings' },
+      { icon: 'calendar', label: 'Kalender', to: '/vendor/calendar' },
+      { icon: 'category', label: 'Layanan', to: '/vendor/services' },
+      { icon: 'clock', label: 'Jadwal', to: '/vendor/schedule' },
+      { icon: 'star', label: 'Ulasan', to: '/vendor/reviews' },
+      { icon: 'store', label: 'Profil Usaha', to: '/vendor/profile' },
+      { icon: 'wallet', label: 'Pendapatan', to: '/vendor/payouts' },
     ],
   },
 ];
 
-export function Sidebar() {
+/** Isi sidebar — dipakai oleh aside desktop maupun drawer mobile. */
+export function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const { data: user } = useCurrentUser();
   const role = user?.role ?? getRole() ?? 'admin';
   const sections = role === 'vendor' ? VENDOR_SECTIONS : ADMIN_SECTIONS;
@@ -66,19 +66,21 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-800 bg-slate-950 px-4 py-6 text-slate-300 lg:flex">
+    <div className="flex h-full flex-col px-4 py-6 text-slate-300">
       {/* Logo */}
       <div className="mb-8 flex items-center gap-3 px-1">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-600 text-white font-bold text-lg shadow">
+        <div className="gj-card flex h-10 w-10 items-center justify-center bg-indigo-600 text-lg font-bold text-white shadow ring-2 ring-amber-400/30">
           G
         </div>
         <div>
-          <p className="text-xs uppercase tracking-widest text-slate-500">Gerai Jasa</p>
-          <p className="text-sm font-semibold text-white capitalize">{role === 'vendor' ? 'Vendor Panel' : 'Admin Panel'}</p>
+          <p className="font-heading text-sm font-bold tracking-tight text-white">Gerai Jasa</p>
+          <p className="text-[11px] uppercase tracking-widest text-amber-400/80">
+            {role === 'vendor' ? 'Vendor Panel' : 'Admin Panel'}
+          </p>
         </div>
       </div>
 
-      {/* Nav sections */}
+      {/* Nav */}
       <nav className="flex-1 space-y-6 overflow-y-auto">
         {sections.map((section) => (
           <div key={section.title}>
@@ -88,16 +90,19 @@ export function Sidebar() {
             <div className="space-y-0.5">
               {section.items.map((item) => {
                 const isActive = currentPath === item.to || currentPath.startsWith(item.to + '/');
+                const IconCmp = Icons[item.icon];
                 return (
                   <Link
                     key={item.to}
                     to={item.to}
-                    className={`flex items-center rounded-xl px-3 py-2 text-sm transition-all ${
+                    onClick={onNavigate}
+                    className={`flex items-center gap-3 rounded-xl border-l-2 px-3 py-2.5 text-sm transition-all ${
                       isActive
-                        ? 'bg-indigo-600 font-semibold text-white shadow-sm'
-                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                        ? 'border-amber-400 bg-indigo-600 font-semibold text-white shadow-sm'
+                        : 'border-transparent text-slate-400 hover:bg-slate-800 hover:text-white'
                     }`}
                   >
+                    <IconCmp className="h-[18px] w-[18px] shrink-0" />
                     {item.label}
                   </Link>
                 );
@@ -110,21 +115,29 @@ export function Sidebar() {
       {/* User footer */}
       <div className="mt-4 rounded-2xl bg-slate-900 p-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-700 text-sm font-bold text-white">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-sm font-bold text-white">
             {user?.name?.[0]?.toUpperCase() ?? '?'}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-white">{user?.name ?? 'Loading...'}</p>
+            <p className="truncate text-sm font-semibold text-white">{user?.name ?? 'Memuat…'}</p>
             <p className="truncate text-xs text-slate-500">{user?.email ?? ''}</p>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="mt-3 w-full rounded-xl py-1.5 text-xs font-medium text-slate-400 hover:bg-slate-800 hover:text-red-400 transition"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl py-2 text-xs font-medium text-slate-400 transition hover:bg-slate-800 hover:text-red-400"
         >
-          Keluar →
+          <Icons.logout className="h-4 w-4" /> Keluar
         </button>
       </div>
+    </div>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <aside className="hidden w-64 shrink-0 bg-slate-950 lg:block">
+      <SidebarBody />
     </aside>
   );
 }

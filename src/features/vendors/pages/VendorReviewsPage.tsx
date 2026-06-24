@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../../../api/client';
+import { PageHeader } from '../../../components/layout/PageHeader';
 import type { ApiResponse } from '../../../types/api';
 
 interface Review {
@@ -67,21 +68,22 @@ export function VendorReviewsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-900">Ulasan Pelanggan</h1>
-        {reviews.length > 0 && (
+      <PageHeader
+        title="Ulasan Pelanggan"
+        subtitle="Tanggapi ulasan untuk membangun kepercayaan pelanggan."
+        actions={reviews.length > 0 && (
           <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2">
-            <span className="text-2xl font-bold text-amber-600">{avgRating.toFixed(1)}</span>
+            <span className="font-heading text-2xl font-bold text-amber-600">{avgRating.toFixed(1)}</span>
             <div>
               <StarRating rating={Math.round(avgRating)} />
               <p className="text-xs text-slate-500">{reviews.length} ulasan</p>
             </div>
           </div>
         )}
-      </div>
+      />
 
       {isError && (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="gj-card border border-red-200 bg-red-50 p-6 text-red-700">
           Gagal memuat ulasan.
         </div>
       )}
@@ -89,13 +91,13 @@ export function VendorReviewsPage() {
       {isLoading && (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-32 animate-pulse rounded-3xl bg-slate-100" />
+            <div key={i} className="h-32 animate-pulse gj-card bg-slate-100" />
           ))}
         </div>
       )}
 
       {!isLoading && reviews.length === 0 && (
-        <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center text-slate-400">
+        <div className="gj-card border border-slate-200 bg-white p-12 text-center text-slate-400">
           <p className="text-4xl">⭐</p>
           <p className="mt-4 font-medium">Belum ada ulasan</p>
           <p className="mt-1 text-sm">Ulasan dari pelanggan akan muncul di sini setelah booking selesai.</p>
@@ -104,7 +106,7 @@ export function VendorReviewsPage() {
 
       <div className="space-y-4">
         {reviews.map((review) => (
-          <div key={review.id} className="rounded-3xl border border-slate-200 bg-white p-6">
+          <div key={review.id} className="gj-card border border-slate-200 bg-white p-6">
             {/* Customer info & rating */}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">

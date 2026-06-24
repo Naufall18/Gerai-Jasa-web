@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import apiClient from '../../../api/client';
 import type { ApiResponse } from '../../../types/api';
 import { getErrorMessage } from '../../../lib/utils';
+import { PageHeader } from '../../../components/layout/PageHeader';
 
 interface Schedule {
   id?: string;
@@ -88,14 +89,10 @@ export function VendorSchedulePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Jadwal Operasional</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Atur hari dan jam buka usaha Anda. Slot booking akan dibuat otomatis berdasarkan jadwal ini.
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Jadwal Operasional"
+        subtitle="Atur hari & jam buka. Slot booking dibuat otomatis dari jadwal ini."
+      />
 
       {isLoading ? (
         <div className="space-y-3">
@@ -104,7 +101,7 @@ export function VendorSchedulePage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-3xl border border-slate-200 bg-white divide-y divide-slate-100">
+        <div className="gj-card border border-slate-200 bg-white divide-y divide-slate-100">
           {display.map((schedule) => (
             <div
               key={schedule.day_of_week}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useVendorBookings, useConfirmBooking, useCompleteBooking } from '../../bookings/hooks/useBookings';
+import { PageHeader } from '../../../components/layout/PageHeader';
 import type { Booking } from '../../../types/models';
 
 type StatusFilter = 'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -37,7 +38,10 @@ export function VendorBookingsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">Booking Masuk</h1>
+      <PageHeader
+        title="Booking Masuk"
+        subtitle="Konfirmasi dan selesaikan pesanan pelanggan Anda."
+      />
 
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2">
@@ -60,21 +64,21 @@ export function VendorBookingsPage() {
       {isLoading && (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-28 animate-pulse rounded-3xl bg-slate-100" />
+            <div key={i} className="h-28 animate-pulse gj-card bg-slate-100" />
           ))}
         </div>
       )}
 
       {/* Error */}
       {isError && (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="gj-card border border-red-200 bg-red-50 p-6 text-red-700">
           Gagal memuat booking. Pastikan Anda sudah login sebagai vendor.
         </div>
       )}
 
       {/* Empty */}
       {!isLoading && !isError && bookings.length === 0 && (
-        <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center text-slate-500">
+        <div className="gj-card border border-slate-200 bg-white p-12 text-center text-slate-500">
           Tidak ada booking untuk filter ini.
         </div>
       )}
@@ -87,7 +91,7 @@ export function VendorBookingsPage() {
             return (
               <div
                 key={booking.id}
-                className="rounded-3xl border border-slate-200 bg-white p-6"
+                className="gj-card border border-slate-200 bg-white p-6"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div className="space-y-1">

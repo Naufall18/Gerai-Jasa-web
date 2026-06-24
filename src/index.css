@@ -1,36 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ============================================================
+   GERAI JASA — Design Tokens  (palet "Pine & Amber")
+   Satu sumber kebenaran untuk web. Komponen memakai utility
+   Tailwind (bg-indigo-600, text-slate-900, dst) yang dipetakan
+   ulang ke palet brand di sini — jadi rebrand tanpa edit tiap file.
+   ============================================================ */
 @theme {
-  --color-primary: #6366f1;
-  --color-accent: #f97316;
-  
-  --color-slate-50: #f8f7ff;
-  --color-slate-100: #f1eff9;
-  --color-slate-200: #e5e3ff;
-  --color-slate-300: #d0cce6;
-  --color-slate-400: #a09dc0;
-  --color-slate-500: #6b7280;
-  --color-slate-600: #4b5563;
-  --color-slate-700: #374151;
-  --color-slate-800: #1e293b;
-  --color-slate-900: #0f172a;
-  --color-slate-950: #0f0d1a;
-  
-  --color-red-500: #ef4444;
-  --color-red-600: #dc2626;
-  
-  --color-emerald-50: #f0fdf4;
-  --color-emerald-600: #16a34a;
-  --color-emerald-700: #15803d;
-  
-  --color-amber-50: #fffbeb;
-  --color-amber-600: #d97706;
-  --color-amber-700: #b45309;
-  
-  --color-indigo-600: #4f46e5;
+  /* ── Brand (spek Pine & Amber) ── */
+  --color-primary:      #1e6f5c;  /* pine */
+  --color-primary-soft: #d8eee7;
+  --color-accent:       #f2a444;  /* amber */
+  --color-accent-soft:  #fff1dd;
+  --color-ink:          #14241f;
+  --color-text-soft:    #55615d;
+  --color-surface:      #fbfaf7;
+  --color-surface-alt:  #f5f3ef;
+
+  /* Tipografi */
+  --font-sans:    "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Sora", ui-sans-serif, system-ui, sans-serif;
+
+  /* Radius (16–20 untuk kartu, sesuai signature) */
+  --radius-card: 18px;
+
+  /* Netral hangat (paper → forest ink) — dipetakan ke skala "slate" */
+  --color-slate-50:  #fbfaf7;  /* surface */
+  --color-slate-100: #f5f3ef;  /* surface alt */
+  --color-slate-200: #e3e8e2;  /* border */
+  --color-slate-300: #cdd5ce;
+  --color-slate-400: #97a39c;
+  --color-slate-500: #6e7a74;
+  --color-slate-600: #55615d;  /* teks sekunder */
+  --color-slate-700: #3a463f;
+  --color-slate-800: #25302b;
+  --color-slate-900: #14241f;  /* ink / teks utama */
+  --color-slate-950: #0e1a16;  /* sidebar gelap */
+
+  /* Primary / brand — dipetakan ke skala "indigo" yang dipakai komponen */
+  --color-indigo-50:  #eaf4f0;
+  --color-indigo-100: #d8eee7;  /* primary soft */
+  --color-indigo-400: #3e9580;
+  --color-indigo-500: #2a8068;
+  --color-indigo-600: #1e6f5c;  /* primary */
+  --color-indigo-700: #185a4b;  /* hover */
+
+  /* Accent / warning — dipetakan ke skala "amber" */
+  --color-amber-50:  #fff1dd;  /* accent soft */
+  --color-amber-200: #fadfb0;
+  --color-amber-400: #f2a444;  /* accent */
+  --color-amber-600: #d68a1f;  /* warning */
+  --color-amber-700: #b5701f;
+  --color-amber-800: #8f5818;
+
+  /* Success */
+  --color-emerald-50:  #e6f3ec;
+  --color-emerald-400: #4caa75;
+  --color-emerald-500: #379a63;
+  --color-emerald-600: #2e8b57;  /* success */
+  --color-emerald-700: #226e44;
+
+  /* Danger */
+  --color-red-50:  #f9ecec;
+  --color-red-200: #efc9c9;
+  --color-red-400: #d97676;
+  --color-red-500: #c94a4a;  /* danger */
+  --color-red-600: #b23e3e;
+  --color-red-700: #8f3030;
+
+  /* Info / "dikonfirmasi" — teal lembut */
+  --color-blue-50:  #e4f0ef;
+  --color-blue-500: #2c8c84;
+  --color-blue-700: #1e6e68;
 }
 
+/* ============================================================
+   Base
+   ============================================================ */
 body {
   background-color: var(--color-slate-50);
   color: var(--color-slate-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.015em;
+}
+
+/* Fokus keyboard yang jelas (aksesibilitas) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   Signature element — "kartu sudut-asimetris"
+   3 sudut 16px, 1 sudut kecil (top-left) → siluet khas Gerai Jasa.
+   ============================================================ */
+.gj-card {
+  border-radius: 4px 16px 16px 16px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* Feedback hover halus untuk kartu interaktif (lift kecil) */
+.gj-hover {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* ============================================================
+   Animasi (halus) — hanya jika user tidak meminta reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes gj-fade-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .gj-fade-in {
+    animation: gj-fade-up 0.4s ease-out both;
+  }
+
+  /* Semua kartu: hover shadow lembut tanpa menggeser layout (aman untuk form) */
+  .gj-card:hover {
+    box-shadow: 0 10px 30px -16px rgba(20, 36, 31, 0.30);
+  }
+
+  /* Kartu interaktif yang memakai .gj-hover: lift kecil */
+  .gj-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -12px rgba(20, 36, 31, 0.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

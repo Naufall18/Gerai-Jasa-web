@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import apiClient from '../../../api/client';
 import type { ApiResponse } from '../../../types/api';
 import { getErrorMessage } from '../../../lib/utils';
+import { PageHeader } from '../../../components/layout/PageHeader';
 
 interface VendorProfile {
   id: string;
@@ -80,7 +81,7 @@ export function VendorProfilePage() {
     return (
       <div className="space-y-6">
         <div className="h-8 w-48 animate-pulse rounded-2xl bg-slate-100" />
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-4">
+        <div className="gj-card border border-slate-200 bg-white p-6 space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="h-12 animate-pulse rounded-2xl bg-slate-100" />
           ))}
@@ -91,7 +92,7 @@ export function VendorProfilePage() {
 
   if (!vendor) {
     return (
-      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-8 text-center">
+      <div className="gj-card border border-amber-200 bg-amber-50 p-8 text-center">
         <p className="text-lg font-semibold text-amber-800">Akun ini belum terhubung ke profil vendor.</p>
         <p className="mt-2 text-sm text-amber-700">Login sebagai vendor untuk mengelola profil usaha.</p>
       </div>
@@ -100,17 +101,16 @@ export function VendorProfilePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900">Profil Usaha</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Slug: <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-xs">{vendor.slug}</code>
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Profil Usaha"
+        subtitle="Informasi yang dilihat pelanggan saat menemukan usaha Anda."
+        actions={
+          <span className="rounded-full bg-slate-100 px-3 py-1 font-mono text-xs text-slate-500">/{vendor.slug}</span>
+        }
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-5">
+        <div className="gj-card border border-slate-200 bg-white p-6 space-y-5">
           {/* Nama Usaha */}
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAdminBookings } from '../../bookings/hooks/useBookings';
+import { PageHeader } from '../../../components/layout/PageHeader';
 import type { Booking } from '../../../types/models';
 
 type StatusFilter = 'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
@@ -50,29 +51,31 @@ export function AdminBookingsPage() {
     : bookings;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-semibold text-slate-900">Semua Booking</h1>
-        <input
-          type="search"
-          placeholder="Cari kode atau nama pelanggan..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:border-indigo-400 md:w-72"
-        />
-      </div>
+    <div>
+      <PageHeader
+        title="Semua Booking"
+        subtitle={`${total} transaksi tercatat`}
+        actions={
+          <input
+            type="search"
+            placeholder="Cari kode atau pelanggan…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition focus:border-indigo-400 sm:w-72"
+          />
+        }
+      />
 
       {/* Filter tabs */}
-      <div className="flex flex-wrap gap-2">
+      <div className="mb-5 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
             key={f.key}
             onClick={() => { setStatusFilter(f.key); setPage(1); }}
-            className={`rounded-2xl px-4 py-2 text-sm font-semibold transition ${
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
               statusFilter === f.key
                 ? 'bg-indigo-600 text-white'
-                : 'border border-slate-200 text-slate-700 hover:bg-slate-50'
+                : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
             }`}
           >
             {f.label}
@@ -81,19 +84,19 @@ export function AdminBookingsPage() {
       </div>
 
       {isError && (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="gj-card border border-red-200 bg-red-50 p-6 text-red-700">
           Gagal memuat data booking. Pastikan Anda sudah login.
         </div>
       )}
 
       {/* Table */}
-      <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden">
+      <div className="gj-card border border-slate-200 bg-white overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="border-b border-slate-200 bg-slate-50/60">
               <tr>
                 {['Kode Booking', 'Pelanggan', 'Vendor', 'Layanan', 'Total', 'Metode', 'Status', 'Tanggal'].map((h) => (
-                  <th key={h} className="px-5 py-3 text-left font-semibold text-slate-700 whitespace-nowrap">{h}</th>
+                  <th key={h} className="whitespace-nowrap px-5 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-400">{h}</th>
                 ))}
               </tr>
             </thead>
