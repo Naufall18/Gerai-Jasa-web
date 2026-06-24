@@ -6,6 +6,7 @@ import apiClient from '../../../api/client';
 import type { ApiResponse } from '../../../types/api';
 import type { Service } from '../../../types/models';
 import { getErrorMessage } from '../../../lib/utils';
+import { PageHeader } from '../../../components/layout/PageHeader';
 
 function useServices() {
   return useQuery({
@@ -117,29 +118,32 @@ export function VendorServicesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-900">Layanan Saya</h1>
-        <button
-          onClick={() => setEditing('new')}
-          className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
-        >
-          + Tambah Layanan
-        </button>
-      </div>
+      <PageHeader
+        title="Layanan Saya"
+        subtitle="Kelola daftar layanan yang bisa dipesan pelanggan."
+        actions={
+          <button
+            onClick={() => setEditing('new')}
+            className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-[0.98]"
+          >
+            + Tambah Layanan
+          </button>
+        }
+      />
 
       {/* Services grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-40 animate-pulse rounded-3xl bg-slate-100" />
+            <div key={i} className="h-40 animate-pulse gj-card bg-slate-100" />
           ))}
         </div>
       ) : isError ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="gj-card border border-red-200 bg-red-50 p-6 text-red-700">
           Gagal memuat layanan. Pastikan Anda login sebagai vendor.
         </div>
       ) : services.length === 0 ? (
-        <div className="rounded-3xl border border-slate-200 bg-white p-12 text-center text-slate-400">
+        <div className="gj-card border border-slate-200 bg-white p-12 text-center text-slate-400">
           <p className="text-4xl">🛎️</p>
           <p className="mt-4 font-medium">Belum ada layanan</p>
           <p className="mt-1 text-sm">Tambahkan layanan agar pelanggan bisa melakukan booking.</p>
@@ -147,7 +151,7 @@ export function VendorServicesPage() {
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {services.map((service) => (
-            <div key={service.id} className={`rounded-3xl border p-6 ${service.is_active ? 'border-slate-200 bg-white' : 'border-dashed border-slate-200 bg-slate-50 opacity-60'}`}>
+            <div key={service.id} className={`gj-card border p-6 ${service.is_active ? 'border-slate-200 bg-white' : 'border-dashed border-slate-200 bg-slate-50 opacity-60'}`}>
               <div className="flex items-start justify-between">
                 <div>
                   <h3 className="font-semibold text-slate-900">{service.name}</h3>
@@ -193,7 +197,7 @@ export function VendorServicesPage() {
       {/* Add / Edit modal */}
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-xl">
+          <div className="w-full max-w-lg gj-card bg-white p-6 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-slate-900">
                 {editing === 'new' ? 'Tambah Layanan Baru' : 'Edit Layanan'}

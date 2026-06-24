@@ -5,6 +5,7 @@ import {
 } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useVendorBookings } from '../../bookings/hooks/useBookings';
+import { PageHeader } from '../../../components/layout/PageHeader';
 import type { Booking } from '../../../types/models';
 
 const STATUS_DOT: Record<string, string> = {
@@ -41,11 +42,14 @@ export function VendorCalendarPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-slate-900">Kalender Booking</h1>
+      <PageHeader
+        title="Kalender Booking"
+        subtitle="Lihat sebaran booking Anda per tanggal."
+      />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Calendar */}
-        <div className="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-6">
+        <div className="lg:col-span-2 gj-card border border-slate-200 bg-white p-6">
           {/* Month nav */}
           <div className="mb-6 flex items-center justify-between">
             <button
@@ -123,7 +127,7 @@ export function VendorCalendarPage() {
         </div>
 
         {/* Sidebar — selected day bookings */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6">
+        <div className="gj-card border border-slate-200 bg-white p-6">
           <h3 className="mb-4 font-semibold text-slate-900">
             {selectedDate
               ? format(selectedDate, 'EEEE, d MMMM yyyy', { locale: id })

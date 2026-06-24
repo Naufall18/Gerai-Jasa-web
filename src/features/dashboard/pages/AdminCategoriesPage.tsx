@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useCategories } from '../hooks/useAdminStats';
 import apiClient from '../../../api/client';
 import { getErrorMessage } from '../../../lib/utils';
+import { PageHeader } from '../../../components/layout/PageHeader';
 import type { Category } from '../../../types/models';
 
 // Simple icon map fallback if no icon_url
@@ -53,18 +54,21 @@ export function AdminCategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-slate-900">Kategori Layanan</h1>
-        <button
-          className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
-          onClick={() => setShowForm(true)}
-        >
-          + Tambah Kategori
-        </button>
-      </div>
+      <PageHeader
+        title="Kategori Layanan"
+        subtitle="Kelompok layanan yang bisa dipilih vendor & pelanggan."
+        actions={
+          <button
+            className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 active:scale-[0.98]"
+            onClick={() => setShowForm(true)}
+          >
+            + Tambah Kategori
+          </button>
+        }
+      />
 
       {isError && (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="gj-card border border-red-200 bg-red-50 p-6 text-red-700">
           Gagal memuat kategori.
         </div>
       )}
@@ -72,7 +76,7 @@ export function AdminCategoriesPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-32 animate-pulse rounded-3xl bg-slate-100" />
+            <div key={i} className="h-32 animate-pulse gj-card bg-slate-100" />
           ))}
         </div>
       ) : (
@@ -85,7 +89,7 @@ export function AdminCategoriesPage() {
           {(categories as Category[]).map((cat) => (
             <div
               key={cat.id}
-              className={`rounded-3xl border p-6 transition ${
+              className={`gj-card border p-6 transition ${
                 cat.is_active
                   ? 'border-slate-200 bg-white'
                   : 'border-dashed border-slate-200 bg-slate-50 opacity-60'
@@ -116,7 +120,7 @@ export function AdminCategoriesPage() {
       {/* Add category modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-xl">
+          <div className="w-full max-w-lg gj-card bg-white p-6 shadow-xl">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-semibold text-slate-900">Tambah Kategori Baru</h3>
               <button onClick={() => setShowForm(false)} className="text-slate-400 hover:text-slate-600">✕</button>

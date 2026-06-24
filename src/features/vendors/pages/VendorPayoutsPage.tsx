@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '../../../api/client';
+import { PageHeader } from '../../../components/layout/PageHeader';
 import type { ApiResponse } from '../../../types/api';
 import type { Booking } from '../../../types/models';
 
@@ -45,10 +46,10 @@ export function VendorPayoutsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900">Laporan Pendapatan</h1>
-        <p className="mt-1 text-sm text-slate-500">Rekap pendapatan dari booking yang telah selesai.</p>
-      </div>
+      <PageHeader
+        title="Laporan Pendapatan"
+        subtitle="Rekap pendapatan dari booking yang telah selesai."
+      />
 
       {/* Summary cards */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -57,7 +58,7 @@ export function VendorPayoutsPage() {
           { label: 'Komisi Platform',  value: isLoading ? '...' : formatRupiah(stats?.totalCommission ?? 0), sub: 'Dipotong oleh platform', color: 'text-red-600' },
           { label: 'Pendapatan Bersih',value: isLoading ? '...' : formatRupiah(stats?.totalNet ?? 0),        sub: 'Yang Anda terima', color: 'text-emerald-600' },
         ].map((card) => (
-          <div key={card.label} className="rounded-3xl border border-slate-200 bg-white p-6">
+          <div key={card.label} className="gj-card border border-slate-200 bg-white p-6">
             <p className="text-sm text-slate-500">{card.label}</p>
             <p className={`mt-2 text-2xl font-bold ${card.color}`}>{card.value}</p>
             <p className="mt-1 text-xs text-slate-400">{card.sub}</p>
@@ -66,16 +67,16 @@ export function VendorPayoutsPage() {
       </div>
 
       {/* Monthly breakdown */}
-      <div className="rounded-3xl border border-slate-200 bg-white overflow-hidden">
+      <div className="gj-card border border-slate-200 bg-white overflow-hidden">
         <div className="border-b border-slate-200 px-6 py-4">
           <h2 className="font-semibold text-slate-900">Riwayat per Bulan</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="border-b border-slate-200 bg-slate-50/60">
               <tr>
                 {['Bulan', 'Jumlah Booking', 'Bruto', 'Komisi', 'Bersih'].map((h) => (
-                  <th key={h} className="px-6 py-3 text-left font-semibold text-slate-700">{h}</th>
+                  <th key={h} className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-400">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -117,7 +118,7 @@ export function VendorPayoutsPage() {
       </div>
 
       {/* Withdrawal info */}
-      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6">
+      <div className="gj-card border border-amber-200 bg-amber-50 p-6">
         <p className="font-semibold text-amber-800">💡 Tentang Penarikan Dana</p>
         <p className="mt-2 text-sm text-amber-700">
           Fitur penarikan dana otomatis sedang dalam pengembangan. Saat ini pembayaran dilakukan manual oleh admin platform setiap akhir bulan. Hubungi admin jika ada pertanyaan.
