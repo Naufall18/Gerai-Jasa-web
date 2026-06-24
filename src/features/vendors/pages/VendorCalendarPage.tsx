@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  addDays, addMonths, eachDayOfInterval, endOfMonth, endOfWeek,
+  addMonths, eachDayOfInterval, endOfMonth, endOfWeek,
   format, isSameDay, isSameMonth, isToday, startOfMonth, startOfWeek, subMonths,
 } from 'date-fns';
 import { id } from 'date-fns/locale';
