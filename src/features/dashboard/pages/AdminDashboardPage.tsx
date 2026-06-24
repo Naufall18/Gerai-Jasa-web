@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useAdminDashboardStats } from '../hooks/useAdminStats';
 import type { Booking } from '../../../types/models';
 
@@ -60,6 +61,42 @@ export function AdminDashboardPage() {
             <StatCard label="Booking Baru" value={String(stats?.recentBookings?.length ?? 0)}
               icon={Icon.bell} tint="#e4f0ef" accent="#1e6e68" />
           </>
+        )}
+      </div>
+
+      {/* ── Tren booking 7 hari ── */}
+      <div className="gj-card border border-slate-200 bg-white p-6">
+        <div className="mb-1 flex items-center justify-between">
+          <h2 className="font-heading text-lg font-bold text-slate-900">Tren Booking</h2>
+          <span className="text-xs font-medium text-slate-400">7 hari terakhir</span>
+        </div>
+        {isLoading ? (
+          <div className="h-56 animate-pulse rounded-2xl bg-slate-100" />
+        ) : (
+          <div className="h-56 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={stats?.trend ?? []} margin={{ top: 12, right: 8, left: -16, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="gjArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#1e6f5c" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="#1e6f5c" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis dataKey="label" tickLine={false} axisLine={false}
+                  tick={{ fill: '#55615d', fontSize: 12 }} />
+                <YAxis allowDecimals={false} tickLine={false} axisLine={false}
+                  tick={{ fill: '#9aa39c', fontSize: 12 }} width={28} />
+                <Tooltip
+                  cursor={{ stroke: '#e3e8e2' }}
+                  contentStyle={{ borderRadius: 12, border: '1px solid #e3e8e2', fontSize: 13 }}
+                  labelStyle={{ color: '#14241f', fontWeight: 600 }}
+                  formatter={(v) => [`${v} booking`, '']}
+                />
+                <Area type="monotone" dataKey="count" stroke="#1e6f5c" strokeWidth={2.5}
+                  fill="url(#gjArea)" dot={{ r: 3, fill: '#1e6f5c' }} activeDot={{ r: 5 }} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         )}
       </div>
 
