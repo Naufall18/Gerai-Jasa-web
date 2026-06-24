@@ -112,6 +112,15 @@ h1, h2, h3, h4 {
 }
 
 /* ============================================================
+   Skeleton — shimmer sweep premium (fallback statis saat reduced-motion)
+   ============================================================ */
+.gj-skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-surface-alt);
+}
+
+/* ============================================================
    Animasi (halus) — hanya jika user tidak meminta reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: no-preference) {
@@ -122,6 +131,16 @@ h1, h2, h3, h4 {
 
   .gj-fade-in {
     animation: gj-fade-up 0.4s ease-out both;
+  }
+
+  @keyframes gj-shimmer { 100% { transform: translateX(100%); } }
+  .gj-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    animation: gj-shimmer 1.5s infinite;
   }
 
   /* Semua kartu: hover shadow lembut tanpa menggeser layout (aman untuk form) */

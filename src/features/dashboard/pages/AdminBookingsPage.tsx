@@ -1,22 +1,10 @@
 import { useState } from 'react';
 import { useAdminBookings } from '../../bookings/hooks/useBookings';
 import { PageHeader } from '../../../components/layout/PageHeader';
+import { StatusBadge } from '../../../components/ui/StatusBadge';
 import type { Booking } from '../../../types/models';
 
 type StatusFilter = 'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled';
-
-const STATUS_STYLES: Record<string, string> = {
-  pending:     'bg-amber-50 text-amber-700',
-  confirmed:   'bg-blue-50 text-blue-700',
-  in_progress: 'bg-indigo-50 text-indigo-700',
-  completed:   'bg-emerald-50 text-emerald-700',
-  cancelled:   'bg-red-50 text-red-700',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  pending: 'Menunggu', confirmed: 'Dikonfirmasi',
-  in_progress: 'Berlangsung', completed: 'Selesai', cancelled: 'Dibatalkan',
-};
 
 function formatRupiah(n: number) {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(n);
@@ -105,7 +93,7 @@ export function AdminBookingsPage() {
                 <tr key={i}>
                   {Array.from({ length: 8 }).map((__, j) => (
                     <td key={j} className="px-5 py-4">
-                      <div className="h-4 animate-pulse rounded bg-slate-100" />
+                      <div className="h-4 rounded gj-skeleton" />
                     </td>
                   ))}
                 </tr>
@@ -127,11 +115,7 @@ export function AdminBookingsPage() {
                   <td className="px-5 py-4 text-slate-600">{(b as any).service?.name ?? '-'}</td>
                   <td className="px-5 py-4 font-semibold text-slate-900">{formatRupiah(Number(b.total_price))}</td>
                   <td className="px-5 py-4 uppercase text-slate-500">{b.payment_method}</td>
-                  <td className="px-5 py-4">
-                    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLES[b.status] ?? 'bg-slate-100 text-slate-600'}`}>
-                      {STATUS_LABELS[b.status] ?? b.status}
-                    </span>
-                  </td>
+                  <td className="px-5 py-4"><StatusBadge status={b.status} dot /></td>
                   <td className="px-5 py-4 text-slate-400 whitespace-nowrap">
                     {new Date(b.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>

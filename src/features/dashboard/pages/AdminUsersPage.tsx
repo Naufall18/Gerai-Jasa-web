@@ -97,7 +97,7 @@ export function AdminUsersPage() {
               {isLoading && Array.from({ length: 6 }).map((_, i) => (
                 <tr key={i}>
                   {Array.from({ length: 5 }).map((__, j) => (
-                    <td key={j} className="px-6 py-4"><div className="h-4 animate-pulse rounded bg-slate-100" /></td>
+                    <td key={j} className="px-6 py-4"><div className="h-4 rounded gj-skeleton" /></td>
                   ))}
                 </tr>
               ))}

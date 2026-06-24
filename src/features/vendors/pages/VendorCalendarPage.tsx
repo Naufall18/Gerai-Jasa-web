@@ -76,7 +76,7 @@ export function VendorCalendarPage() {
           {isLoading ? (
             <div className="grid grid-cols-7 gap-1">
               {Array.from({ length: 35 }).map((_, i) => (
-                <div key={i} className="h-14 animate-pulse rounded-xl bg-slate-100" />
+                <div key={i} className="h-14 rounded-xl gj-skeleton" />
               ))}
             </div>
           ) : (

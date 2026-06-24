@@ -54,7 +54,7 @@ export function VendorDashboardPage() {
           <h3 className="mb-4 font-heading text-lg font-bold text-slate-900">Booking Menunggu Konfirmasi</h3>
           <div className="space-y-3">
             {pendingLoading ? (
-              <div className="h-16 animate-pulse rounded-2xl bg-slate-100" />
+              <div className="h-16 rounded-2xl gj-skeleton" />
             ) : (
               pendingBookings.slice(0, 3).map((b) => (
                 <div key={b.id} className="flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:border-slate-200 hover:bg-slate-50">

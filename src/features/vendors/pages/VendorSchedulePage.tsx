@@ -97,7 +97,7 @@ export function VendorSchedulePage() {
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 7 }).map((_, i) => (
-            <div key={i} className="h-16 animate-pulse rounded-2xl bg-slate-100" />
+            <div key={i} className="h-16 rounded-2xl gj-skeleton" />
           ))}
         </div>
       ) : (

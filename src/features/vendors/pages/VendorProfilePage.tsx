@@ -80,10 +80,10 @@ export function VendorProfilePage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-48 animate-pulse rounded-2xl bg-slate-100" />
+        <div className="h-8 w-48 rounded-2xl gj-skeleton" />
         <div className="gj-card border border-slate-200 bg-white p-6 space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-12 animate-pulse rounded-2xl bg-slate-100" />
+            <div key={i} className="h-12 rounded-2xl gj-skeleton" />
           ))}
         </div>
       </div>

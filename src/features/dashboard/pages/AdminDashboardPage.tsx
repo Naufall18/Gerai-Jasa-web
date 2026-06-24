@@ -1,15 +1,8 @@
 import type { ReactNode } from 'react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useAdminDashboardStats } from '../hooks/useAdminStats';
+import { StatusBadge } from '../../../components/ui/StatusBadge';
 import type { Booking } from '../../../types/models';
-
-const STATUS_STYLES: Record<string, string> = {
-  pending:     'bg-amber-50 text-amber-700',
-  confirmed:   'bg-blue-50 text-blue-700',
-  in_progress: 'bg-indigo-50 text-indigo-700',
-  completed:   'bg-emerald-50 text-emerald-700',
-  cancelled:   'bg-red-50 text-red-700',
-};
 
 function formatRupiah(n: number) {
   return new Intl.NumberFormat('id-ID', {
@@ -26,7 +19,7 @@ const Icon = {
 };
 
 function SkeletonCard() {
-  return <div className="h-32 animate-pulse gj-card bg-slate-100" />;
+  return <div className="h-32 gj-card gj-skeleton" />;
 }
 
 export function AdminDashboardPage() {
@@ -71,7 +64,7 @@ export function AdminDashboardPage() {
           <span className="text-xs font-medium text-slate-400">7 hari terakhir</span>
         </div>
         {isLoading ? (
-          <div className="h-56 animate-pulse rounded-2xl bg-slate-100" />
+          <div className="h-56 rounded-2xl gj-skeleton" />
         ) : (
           <div className="h-56 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -109,7 +102,7 @@ export function AdminDashboardPage() {
         {isLoading ? (
           <div className="space-y-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-12 animate-pulse rounded-2xl bg-slate-100" />
+              <div key={i} className="h-12 rounded-2xl gj-skeleton" />
             ))}
           </div>
         ) : stats?.recentBookings?.length === 0 ? (
@@ -134,11 +127,7 @@ export function AdminDashboardPage() {
                 {stats?.recentBookings?.map((b: Booking) => (
                   <tr key={b.id} className="transition hover:bg-slate-50">
                     <td className="py-3 font-mono font-bold text-indigo-600">{b.booking_code}</td>
-                    <td className="py-3">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${STATUS_STYLES[b.status] ?? 'bg-slate-50 text-slate-600'}`}>
-                        {b.status}
-                      </span>
-                    </td>
+                    <td className="py-3"><StatusBadge status={b.status} dot /></td>
                     <td className="py-3 uppercase text-slate-600">{b.payment_method}</td>
                     <td className="py-3 font-semibold text-slate-900">{formatRupiah(Number(b.total_price))}</td>
                     <td className="py-3 text-slate-500">

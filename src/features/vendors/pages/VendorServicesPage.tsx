@@ -135,7 +135,7 @@ export function VendorServicesPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-40 animate-pulse gj-card bg-slate-100" />
+            <div key={i} className="h-40 gj-card gj-skeleton" />
           ))}
         </div>
       ) : isError ? (
