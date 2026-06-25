@@ -14,7 +14,7 @@ export function useAdminBookings(page = 1, status?: string) {
       const params: Record<string, unknown> = { page };
       if (status) params.status = status;
       const res = await apiClient.get<ApiResponse<Booking[]> & { meta: BookingListMeta }>(
-        '/bookings',
+        '/admin/bookings',
         { params }
       );
       return res.data;
