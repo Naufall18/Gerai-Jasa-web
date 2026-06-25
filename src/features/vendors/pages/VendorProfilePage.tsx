@@ -110,31 +110,45 @@ export function VendorProfilePage() {
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="gj-card border border-slate-200 bg-white p-6 space-y-5">
-          {/* Nama Usaha */}
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">
-              Nama Usaha <span className="text-red-500">*</span>
-            </label>
-            <input
-              {...register('name')}
-              className={`w-full rounded-2xl border px-4 py-2.5 text-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 ${errors.name ? 'border-red-400' : 'border-slate-200'}`}
-            />
-            {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+        {/* Section: Identitas Usaha */}
+        <section className="gj-card border border-slate-200 bg-white p-6">
+          <div className="mb-5">
+            <h2 className="font-heading text-base font-bold text-slate-900">Identitas Usaha</h2>
+            <p className="mt-0.5 text-sm text-slate-500">Nama & deskripsi yang tampil di halaman vendor.</p>
           </div>
+          <div className="space-y-5">
+            {/* Nama Usaha */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">
+                Nama Usaha <span className="text-red-500">*</span>
+              </label>
+              <input
+                {...register('name')}
+                className={`w-full rounded-2xl border px-4 py-2.5 text-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 ${errors.name ? 'border-red-400' : 'border-slate-200'}`}
+              />
+              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+            </div>
 
-          {/* Deskripsi */}
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Deskripsi</label>
-            <textarea
-              {...register('description')}
-              rows={4}
-              placeholder="Ceritakan tentang usaha Anda..."
-              className="w-full rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 resize-none"
-            />
+            {/* Deskripsi */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-slate-700">Deskripsi</label>
+              <textarea
+                {...register('description')}
+                rows={4}
+                placeholder="Ceritakan tentang usaha Anda..."
+                className="w-full rounded-2xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 resize-none"
+              />
+              <p className="mt-1 text-xs text-slate-400">Deskripsi singkat membantu pelanggan mengenal usaha Anda.</p>
+            </div>
           </div>
+        </section>
 
-          {/* Address & City */}
+        {/* Section: Lokasi */}
+        <section className="gj-card border border-slate-200 bg-white p-6">
+          <div className="mb-5">
+            <h2 className="font-heading text-base font-bold text-slate-900">Lokasi</h2>
+            <p className="mt-0.5 text-sm text-slate-500">Alamat usaha agar mudah ditemukan pelanggan.</p>
+          </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700">Alamat</label>
@@ -153,7 +167,7 @@ export function VendorProfilePage() {
               />
             </div>
           </div>
-        </div>
+        </section>
 
         <div className="flex items-center gap-3">
           <button
