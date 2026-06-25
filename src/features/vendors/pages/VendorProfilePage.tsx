@@ -31,8 +31,8 @@ function useMyProfile() {
   return useQuery({
     queryKey: ['vendor', 'my-profile'],
     queryFn: async () => {
-      const res = await apiClient.get<ApiResponse<any>>('/auth/me');
-      return (res.data.data as any)?.vendor as VendorProfile | undefined;
+      const res = await apiClient.get<ApiResponse<{ vendor?: VendorProfile }>>('/auth/me');
+      return res.data.data?.vendor;
     },
     staleTime: 60_000,
   });

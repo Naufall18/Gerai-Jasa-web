@@ -29,12 +29,12 @@ export function AdminBookingsPage() {
   );
 
   const bookings: Booking[] = data?.data ?? [];
-  const total = (data as any)?.meta?.pagination?.total ?? 0;
+  const total = data?.meta?.pagination?.total ?? 0;
 
   const filtered = search
     ? bookings.filter((b) =>
         b.booking_code.toLowerCase().includes(search.toLowerCase()) ||
-        (b as any).customer?.name?.toLowerCase().includes(search.toLowerCase())
+        b.customer?.name?.toLowerCase().includes(search.toLowerCase())
       )
     : bookings;
 
@@ -77,8 +77,8 @@ export function AdminBookingsPage() {
         </div>
       )}
 
-      {/* Table */}
-      <div className="gj-card border border-slate-200 bg-white overflow-hidden">
+      {/* Desktop: tabel */}
+      <div className="gj-card hidden border border-slate-200 bg-white overflow-hidden md:block">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b border-slate-200 bg-slate-50/60">
@@ -110,9 +110,9 @@ export function AdminBookingsPage() {
               {!isLoading && filtered.map((b) => (
                 <tr key={b.id} className="hover:bg-slate-50">
                   <td className="px-5 py-4 font-mono font-bold text-indigo-600">{b.booking_code}</td>
-                  <td className="px-5 py-4 text-slate-700">{(b as any).customer?.name ?? '-'}</td>
-                  <td className="px-5 py-4 text-slate-600">{(b as any).vendor?.name ?? '-'}</td>
-                  <td className="px-5 py-4 text-slate-600">{(b as any).service?.name ?? '-'}</td>
+                  <td className="px-5 py-4 text-slate-700">{b.customer?.name ?? '-'}</td>
+                  <td className="px-5 py-4 text-slate-600">{b.vendor?.name ?? '-'}</td>
+                  <td className="px-5 py-4 text-slate-600">{b.service?.name ?? '-'}</td>
                   <td className="px-5 py-4 font-semibold text-slate-900">{formatRupiah(Number(b.total_price))}</td>
                   <td className="px-5 py-4 uppercase text-slate-500">{b.payment_method}</td>
                   <td className="px-5 py-4"><StatusBadge status={b.status} dot /></td>
@@ -124,6 +124,44 @@ export function AdminBookingsPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile: daftar kartu */}
+      <div className="space-y-3 md:hidden">
+        {isLoading &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="gj-card border border-slate-200 bg-white p-4">
+              <div className="h-20 rounded gj-skeleton" />
+            </div>
+          ))}
+
+        {!isLoading && filtered.length === 0 && (
+          <div className="gj-card border border-slate-200 bg-white p-8 text-center text-slate-400">
+            Tidak ada booking ditemukan.
+          </div>
+        )}
+
+        {!isLoading &&
+          filtered.map((b) => (
+            <div key={b.id} className="gj-card border border-slate-200 bg-white p-4">
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-mono text-sm font-bold text-indigo-600">{b.booking_code}</span>
+                <StatusBadge status={b.status} dot />
+              </div>
+              <p className="mt-2 font-semibold text-slate-900">{b.customer?.name ?? '-'}</p>
+              <p className="text-sm text-slate-500">
+                {b.vendor?.name ?? '-'}
+                {b.service?.name ? ` · ${b.service.name}` : ''}
+              </p>
+              <div className="mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2.5 text-xs">
+                <span className="font-semibold text-slate-900">{formatRupiah(Number(b.total_price))}</span>
+                <span className="uppercase text-slate-400">{b.payment_method}</span>
+                <span className="text-slate-400">
+                  {new Date(b.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+            </div>
+          ))}
       </div>
 
       {/* Pagination */}

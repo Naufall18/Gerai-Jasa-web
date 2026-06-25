@@ -83,7 +83,8 @@ export function AdminUsersPage() {
         </div>
       )}
 
-      <div className="gj-card border border-slate-200 bg-white overflow-hidden">
+      {/* Desktop: tabel */}
+      <div className="gj-card hidden border border-slate-200 bg-white overflow-hidden md:block">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="border-b border-slate-200 bg-slate-50/60">
@@ -144,6 +145,53 @@ export function AdminUsersPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile: daftar kartu */}
+      <div className="space-y-3 md:hidden">
+        {isLoading &&
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="gj-card border border-slate-200 bg-white p-4">
+              <div className="h-14 rounded gj-skeleton" />
+            </div>
+          ))}
+
+        {!isLoading && users.length === 0 && (
+          <div className="gj-card border border-slate-200 bg-white p-8 text-center">
+            <p className="font-medium text-slate-600">Tidak ada pengguna</p>
+            <p className="mt-1 text-sm text-slate-400">Coba ubah kata kunci atau filter role.</p>
+          </div>
+        )}
+
+        {!isLoading &&
+          users.map((user) => (
+            <div key={user.id} className="gj-card border border-slate-200 bg-white p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-sm font-bold text-indigo-700">
+                  {user.name?.[0]?.toUpperCase() ?? '?'}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="truncate font-semibold text-slate-900">{user.name}</p>
+                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${ROLE_STYLES[user.role] ?? 'bg-slate-50 text-slate-600'}`}>
+                      {user.role}
+                    </span>
+                  </div>
+                  <p className="truncate text-sm text-slate-600">{user.email ?? '-'}</p>
+                  <p className="text-xs text-slate-400">{user.phone ?? '-'}</p>
+                  <div className="mt-2 flex items-center justify-between text-xs">
+                    <span className={`inline-flex items-center gap-1.5 font-medium ${user.is_active ? 'text-emerald-700' : 'text-red-600'}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${user.is_active ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                      {user.is_active ? 'Aktif' : 'Nonaktif'}
+                    </span>
+                    <span className="text-slate-400">
+                      {user.created_at ? new Date(user.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
       </div>
 
       {/* Pagination */}

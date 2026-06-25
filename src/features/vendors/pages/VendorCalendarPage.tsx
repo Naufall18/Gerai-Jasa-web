@@ -24,7 +24,7 @@ export function VendorCalendarPage() {
 
   // Build a map: "yyyy-MM-dd" → Booking[]
   const bookingsByDate = bookings.reduce<Record<string, Booking[]>>((acc, b) => {
-    const slot = (b as any).time_slot;
+    const slot = b.time_slot;
     if (!slot?.slot_date) return acc;
     const key = slot.slot_date as string;
     acc[key] = [...(acc[key] ?? []), b];
@@ -144,7 +144,7 @@ export function VendorCalendarPage() {
 
           <div className="space-y-3">
             {selectedBookings.map((b) => {
-              const slot = (b as any).time_slot;
+              const slot = b.time_slot;
               return (
                 <div key={b.id} className="rounded-2xl border border-slate-100 p-3">
                   <div className="flex items-center justify-between">
@@ -157,10 +157,10 @@ export function VendorCalendarPage() {
                     }`}>{b.status}</span>
                   </div>
                   <p className="mt-1 text-sm font-medium text-slate-800">
-                    {(b as any).customer?.name ?? 'Pelanggan'}
+                    {b.customer?.name ?? 'Pelanggan'}
                   </p>
                   <p className="text-xs text-slate-500">
-                    {(b as any).service?.name ?? '-'} · {slot?.slot_time?.slice(0, 5) ?? '-'}
+                    {b.service?.name ?? '-'} · {slot?.slot_time?.slice(0, 5) ?? '-'}
                   </p>
                 </div>
               );

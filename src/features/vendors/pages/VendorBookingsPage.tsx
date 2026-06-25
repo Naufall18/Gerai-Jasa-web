@@ -94,16 +94,12 @@ export function VendorBookingsPage() {
                       <StatusBadge status={booking.status} dot />
                     </div>
                     <p className="font-semibold text-slate-900">
-                      {/* @ts-ignore — relations loaded from API */}
-                      {(booking as any).customer?.name ?? 'Pelanggan'}
+                      {booking.customer?.name ?? 'Pelanggan'}
                     </p>
                     <p className="text-sm text-slate-500">
-                      {/* @ts-ignore */}
-                      {(booking as any).service?.name ?? '-'} &bull;{' '}
-                      {/* @ts-ignore */}
-                      {(booking as any).time_slot?.slot_date ?? ''}{' '}
-                      {/* @ts-ignore */}
-                      {(booking as any).time_slot?.slot_time ?? ''}
+                      {booking.service?.name ?? '-'} &bull;{' '}
+                      {booking.time_slot?.slot_date ?? ''}{' '}
+                      {booking.time_slot?.slot_time ?? ''}
                     </p>
                     <p className="text-sm font-semibold text-slate-900">
                       {formatRupiah(Number(booking.total_price))}
