@@ -28,8 +28,8 @@ function useVendorSlug() {
   return useQuery({
     queryKey: ['vendor', 'my-slug'],
     queryFn: async () => {
-      const res = await apiClient.get<ApiResponse<any>>('/auth/me');
-      return (res.data.data as any)?.vendor?.slug as string | undefined;
+      const res = await apiClient.get<ApiResponse<{ vendor?: { slug: string } }>>('/auth/me');
+      return res.data.data?.vendor?.slug;
     },
     staleTime: Infinity,
   });
@@ -40,8 +40,8 @@ function useSchedules(vendorSlug?: string) {
     queryKey: ['vendor', 'schedules', vendorSlug],
     enabled: !!vendorSlug,
     queryFn: async () => {
-      const res = await apiClient.get<ApiResponse<any>>(`/vendors/${vendorSlug}`);
-      const raw: Schedule[] = (res.data.data as any)?.schedules ?? [];
+      const res = await apiClient.get<ApiResponse<{ schedules?: Schedule[] }>>(`/vendors/${vendorSlug}`);
+      const raw: Schedule[] = res.data.data?.schedules ?? [];
       // Merge with defaults for missing days
       const byDow = Object.fromEntries(raw.map((s) => [s.day_of_week, s]));
       return ORDERED_DAYS.map((dow) => byDow[dow] ?? DEFAULT_SCHEDULES.find((d) => d.day_of_week === dow)!);

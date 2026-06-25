@@ -19,7 +19,7 @@ function useVendorPayoutStats() {
 
       const completed = bookings.filter((b) => b.status === 'completed');
       const totalGross   = completed.reduce((s, b) => s + Number(b.total_price), 0);
-      const totalCommission = completed.reduce((s, b) => s + Number((b as any).commission_amount ?? 0), 0);
+      const totalCommission = completed.reduce((s, b) => s + Number(b.commission_amount ?? 0), 0);
       const totalNet     = totalGross - totalCommission;
 
       // Group by month for payout history
@@ -28,7 +28,7 @@ function useVendorPayoutStats() {
         const month = b.created_at.slice(0, 7); // "yyyy-MM"
         if (!byMonth[month]) byMonth[month] = { gross: 0, commission: 0, count: 0 };
         byMonth[month].gross      += Number(b.total_price);
-        byMonth[month].commission += Number((b as any).commission_amount ?? 0);
+        byMonth[month].commission += Number(b.commission_amount ?? 0);
         byMonth[month].count      += 1;
       });
 

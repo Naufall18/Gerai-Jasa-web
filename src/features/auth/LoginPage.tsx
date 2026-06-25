@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
 import apiClient from '../../api/client';
 import { setToken } from '../../lib/auth';
 
@@ -36,8 +37,9 @@ export function LoginPage() {
       } else {
         setServerError(res.data.message || 'Login gagal.');
       }
-    } catch (err: any) {
-      setServerError(err.response?.data?.message || 'Email atau password salah.');
+    } catch (err) {
+      const apiErr = err as AxiosError<{ message?: string }>;
+      setServerError(apiErr.response?.data?.message || 'Email atau password salah.');
     }
   }
 

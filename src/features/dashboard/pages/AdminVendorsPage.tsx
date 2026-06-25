@@ -15,7 +15,7 @@ export function AdminVendorsPage() {
 
   const { data, isLoading, isError } = useAdminVendors(page);
   const vendors: Vendor[] = data?.data ?? [];
-  const total = (data as any)?.meta?.pagination?.total ?? 0;
+  const total = data?.meta?.pagination?.total ?? 0;
 
   const filtered = search
     ? vendors.filter(
@@ -47,7 +47,8 @@ export function AdminVendorsPage() {
         </div>
       )}
 
-      <div className="gj-card border border-slate-200 bg-white overflow-hidden">
+      {/* Desktop: tabel */}
+      <div className="gj-card hidden border border-slate-200 bg-white overflow-hidden md:block">
         <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="border-b border-slate-200 bg-slate-50/60">
@@ -107,6 +108,52 @@ export function AdminVendorsPage() {
           </tbody>
         </table>
         </div>
+      </div>
+
+      {/* Mobile: daftar kartu */}
+      <div className="space-y-3 md:hidden">
+        {isLoading &&
+          Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="gj-card border border-slate-200 bg-white p-4">
+              <div className="h-16 rounded gj-skeleton" />
+            </div>
+          ))}
+
+        {!isLoading && filtered.length === 0 && (
+          <div className="gj-card border border-slate-200 bg-white p-8 text-center text-slate-400">
+            Tidak ada vendor ditemukan.
+          </div>
+        )}
+
+        {!isLoading &&
+          filtered.map((vendor) => (
+            <div key={vendor.id} className="gj-card border border-slate-200 bg-white p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-100 text-sm font-bold text-indigo-700">
+                  {vendor.name?.[0]?.toUpperCase() ?? '?'}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-slate-900">{vendor.name}</p>
+                      <p className="truncate text-xs text-slate-400">{vendor.slug}</p>
+                    </div>
+                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${STATUS_STYLES[vendor.status] ?? 'bg-slate-50 text-slate-600'}`}>
+                      {vendor.status}
+                    </span>
+                  </div>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
+                    <span>{vendor.city ?? '-'}</span>
+                    <span>
+                      <span className="font-medium text-amber-600">★</span> {Number(vendor.rating_avg ?? 0).toFixed(1)}{' '}
+                      <span className="text-slate-400">({vendor.rating_count ?? 0})</span>
+                    </span>
+                    <span>Komisi {vendor.commission_rate != null ? `${Number(vendor.commission_rate)}%` : '-'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
       </div>
 
       {/* Pagination */}

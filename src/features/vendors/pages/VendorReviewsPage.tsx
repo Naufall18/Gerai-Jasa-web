@@ -29,7 +29,7 @@ function useVendorProfile() {
     queryKey: ['vendor', 'profile'],
     queryFn: async () => {
       const res = await apiClient.get<ApiResponse<{ vendor?: { id: string } }>>('/auth/me');
-      return (res.data.data as any)?.vendor?.id as string | undefined;
+      return res.data.data?.vendor?.id;
     },
     staleTime: Infinity,
   });
