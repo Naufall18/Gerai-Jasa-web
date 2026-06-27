@@ -22,12 +22,14 @@ export function useAdminBookings(page = 1, status?: string) {
   });
 }
 
-export function useVendorBookings(page = 1, status?: string) {
+export function useVendorBookings(page = 1, status?: string, from?: string, to?: string) {
   return useQuery({
-    queryKey: ['vendor', 'bookings', page, status],
+    queryKey: ['vendor', 'bookings', page, status, from, to],
     queryFn: async () => {
       const params: Record<string, unknown> = { page };
       if (status) params.status = status;
+      if (from) params.from = from;
+      if (to) params.to = to;
       const res = await apiClient.get<ApiResponse<Booking[]> & { meta: BookingListMeta }>(
         '/vendor/bookings',
         { params }

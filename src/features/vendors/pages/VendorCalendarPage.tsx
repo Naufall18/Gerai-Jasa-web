@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   addMonths, eachDayOfInterval, endOfMonth, endOfWeek,
   format, isSameDay, isSameMonth, isToday, startOfMonth, startOfWeek, subMonths,
@@ -19,7 +19,13 @@ export function VendorCalendarPage() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  const { data, isLoading } = useVendorBookings(1);
+  const monthStartDate = useMemo(() => startOfMonth(currentMonth), [currentMonth]);
+  const monthEndDate   = useMemo(() => endOfMonth(currentMonth), [currentMonth]);
+
+  const fromStr = useMemo(() => format(monthStartDate, 'yyyy-MM-dd'), [monthStartDate]);
+  const toStr   = useMemo(() => format(monthEndDate, 'yyyy-MM-dd'), [monthEndDate]);
+
+  const { data, isLoading } = useVendorBookings(1, undefined, fromStr, toStr);
   const bookings: Booking[] = data?.data ?? [];
 
   // Build a map: "yyyy-MM-dd" → Booking[]
@@ -31,10 +37,8 @@ export function VendorCalendarPage() {
     return acc;
   }, {});
 
-  const monthStart = startOfMonth(currentMonth);
-  const monthEnd   = endOfMonth(currentMonth);
-  const calStart   = startOfWeek(monthStart, { weekStartsOn: 1 });
-  const calEnd     = endOfWeek(monthEnd, { weekStartsOn: 1 });
+  const calStart   = startOfWeek(monthStartDate, { weekStartsOn: 1 });
+  const calEnd     = endOfWeek(monthEndDate, { weekStartsOn: 1 });
   const allDays    = eachDayOfInterval({ start: calStart, end: calEnd });
 
   const selectedKey      = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null;
