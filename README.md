@@ -1,117 +1,142 @@
 # Gerai Jasa Web Dashboard
 
-React 18 + TypeScript admin & vendor dashboard for **Gerai Jasa** — a multi-vendor booking platform for the Indonesian market.
+React 18 + TypeScript admin & vendor dashboard untuk **Gerai Jasa** — platform booking multi-vendor (salon, klinik, bengkel) untuk pasar Indonesia.
+
+**Desain:** Pine & Amber (#1E6F5C primary, #F2A444 accent)
+
+---
 
 ## Tech Stack
 
 - **React 18** + **TypeScript**
 - **Vite** (build tool)
 - **Tailwind CSS v4** (styling)
-- **shadcn/ui** (component library, New York style)
-- **TanStack Query** (server state management)
-- **Zustand** (client state management)
+- **shadcn/ui** (component library)
+- **TanStack Query** (server state)
+- **Zustand** (client state)
 - **React Hook Form** + **Zod** (form validation)
 - **React Router** (routing)
-- **Recharts** (charts & analytics)
+- **Recharts** (charts)
 - **Lucide React** (icons)
 - **date-fns** (date utilities)
 
-## Features
+---
+
+## Fitur
 
 ### Super Admin Dashboard (`/admin/*`)
-- 📊 **Dashboard** — Stats cards (bookings, revenue, vendors, users), booking trend chart, recent bookings table
-- 🏪 **Vendors** — Vendor management table with search/filter, approve/suspend actions, status badges
-- 📋 **Bookings** — All bookings with filters (status, date range, vendor, category)
-- 📁 **Categories** — CRUD categories with icon upload
-- 👥 **Users** — User management table
+- **Dashboard** — Statistik (total booking, revenue, vendor, user), grafik tren booking
+- **Vendors** — Tabel vendor dengan search/filter, approve/suspend
+- **Bookings** — Semua booking dengan filter status, vendor, kategori
+- **Categories** — CRUD kategori
+- **Users** — Manajemen user
 
 ### Vendor Dashboard (`/vendor/*`)
-- 📊 **Dashboard** — Today's bookings, monthly revenue, pending confirmations, upcoming bookings
-- 📋 **Bookings** — Booking list with tabs (pending/confirmed/completed/cancelled), confirm/reject actions
-- 📅 **Calendar** — Calendar view showing booked slots per day
-- 🛠️ **Services** — CRUD services (name, price, duration, active toggle)
-- ⏰ **Schedule** — Weekly schedule form (open/close time per day, day off toggle)
-- ⭐ **Reviews** — List reviews with reply feature
-- 👤 **Profile** — Edit vendor profile, upload photos, business info
-- 💰 **Payouts** — Payout history table
+- **Dashboard** — Booking hari ini, revenue bulanan, pending confirmations
+- **Bookings** — List booking dengan tab (pending/confirmed/completed/cancelled), filter status
+- **Calendar** — Kalender booking dengan date range, dot indikator per status
+- **Services** — CRUD layanan (nama, harga, durasi, active toggle)
+- **Schedule** — Form jadwal mingguan (open/close time, day off)
+- **Reviews** — List ulasan dengan fitur balas
+- **Profile** — Edit profil, upload foto bisnis
+- **Payouts** — Riwayat payout
 
-## Design System
+---
 
-- **Primary**: Indigo `#6366F1`
-- **Background**: `#F4F3FF` (light lavender)
-- **Sidebar**: `#0F0D1A` (dark indigo-black)
-- **Font**: Inter
-- **Style**: Clean, minimal, data-dense (Linear/Vercel inspired)
-
-## Folder Structure
+## Struktur Folder
 
 ```
 src/
-├── api/                        # Axios instance + API calls
+├── api/                        # Axios instance + interceptor
 ├── components/
-│   ├── ui/                     # shadcn/ui components (Button, Card, Badge, Input, Label)
+│   ├── ui/                     # shadcn/ui (Button, Card, Badge, dll)
 │   └── layout/                 # AppShell, Sidebar
 ├── features/
-│   ├── dashboard/pages/        # Admin pages (Dashboard, Vendors, Bookings, Categories, Users)
-│   └── vendors/pages/          # Vendor pages (Dashboard, Bookings, Calendar, Services, etc.)
-├── hooks/                      # Global custom hooks
-├── lib/                        # Utils, constants, Zod schemas
+│   ├── dashboard/pages/        # Halaman admin
+│   │   ├── DashboardPage.tsx
+│   │   ├── VendorsPage.tsx
+│   │   ├── BookingsPage.tsx
+│   │   ├── CategoriesPage.tsx
+│   │   └── UsersPage.tsx
+│   └── vendors/pages/          # Halaman vendor
+│       ├── DashboardPage.tsx
+│       ├── BookingsPage.tsx
+│       ├── CalendarPage.tsx
+│       ├── ServicesPage.tsx
+│       ├── SchedulePage.tsx
+│       ├── ReviewsPage.tsx
+│       ├── ProfilePage.tsx
+│       └── PayoutsPage.tsx
+├── hooks/                      # Custom hooks
+├── lib/                        # Utility, constants, Zod schemas
 ├── stores/                     # Zustand stores
-├── types/                      # TypeScript types (models.ts, api.ts)
+├── types/                      # TypeScript types
 ├── router/                     # React Router config
-├── App.tsx                     # Root component
-├── main.tsx                    # Entry point
-└── index.css                   # Tailwind CSS imports
+├── App.tsx
+├── main.tsx
+└── index.css                   # Tailwind + custom styles
 ```
+
+---
 
 ## Setup
 
 ```bash
-# Clone
-git clone https://github.com/Naufall18/geraijasa-web.git
-cd geraijasa-web
+git clone https://github.com/Naufall18/Gerai-Jasa-web.git
+cd Gerai-Jasa-web
 
-# Install dependencies
 npm install
-
-# Environment
 cp .env.example .env
-# Configure VITE_API_URL to point to your backend
 
-# Development
-npm run dev
-
-# Build
-npm run build
-
-# Preview production build
-npm run preview
+# Atur VITE_API_URL ke backend API
+npm run dev        # http://localhost:5173
+npm run build      # Production build
+npm run preview    # Preview build
 ```
 
-## Environment Variables
+### Environment Variables
 
 ```env
 VITE_API_URL=http://localhost:8000/api/v1
-VITE_PUSHER_APP_KEY=
-VITE_PUSHER_HOST=localhost
-VITE_PUSHER_PORT=6001
-VITE_MIDTRANS_CLIENT_KEY=
 ```
+
+---
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start dev server (port 5173) |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
+| Command | Deskripsi |
+|---------|-----------|
+| `npm run dev` | Dev server (port 5173) |
+| `npm run build` | Build production |
+| `npm run preview` | Preview build |
+| `npm run lint` | ESLint |
 
-## Related Repositories
+---
 
-- **Backend API**: [geraijasa-backend](https://github.com/Naufall18/geraijasa-backend) — Laravel 11 REST API
-- **Mobile App**: [geraijasa-mobile](https://github.com/Naufall18/geraijasa-mobile) — Flutter 3.x (Customer App)
+## Deployment (Vercel)
 
-## License
+Hubungkan repo `Gerai-Jasa-web` ke Vercel:
+
+1. Import repo di [vercel.com](https://vercel.com)
+2. Set `VITE_API_URL` ke production backend URL
+3. Deploy — Vercel auto-detect Vite
+
+Atau via CLI:
+```bash
+npm i -g vercel
+vercel --prod
+```
+
+---
+
+## Repositori Terkait
+
+- **Backend API**: [Gerai-Jasa-backend](https://github.com/Naufall18/Gerai-Jasa-backend)
+- **Mobile App**: [Gerai-Jasa-mobile](https://github.com/Naufall18/Gerai-Jasa-mobile)
+- **Fullstack**: [Gerai-Jasa](https://github.com/Naufall18/Gerai-Jasa)
+
+---
+
+## Lisensi
 
 MIT
