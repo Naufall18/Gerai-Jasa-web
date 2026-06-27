@@ -53,7 +53,7 @@ export function LoginPage() {
         <div className="pointer-events-none absolute right-16 bottom-24 h-24 w-24 rounded-[4px_28px_28px_28px] border-2 border-amber-400/40" />
 
         <div className="relative flex items-center gap-3">
-          <div className="gj-card flex h-11 w-11 items-center justify-center bg-amber-400 text-lg font-bold text-[#14463b]">G</div>
+          <img src="/gerai-jasa-logo.svg" alt="Gerai Jasa" className="h-11 w-11" />
           <span className="font-heading text-lg font-bold">Gerai Jasa</span>
         </div>
 
@@ -88,9 +88,7 @@ export function LoginPage() {
       <div className="gj-fade-in w-full max-w-sm">
         {/* Logo (mobile only) */}
         <div className="mb-8 text-center lg:text-left">
-          <div className="gj-card mx-auto mb-4 flex h-14 w-14 items-center justify-center bg-indigo-600 text-xl font-bold text-white shadow-lg ring-2 ring-amber-400/30 lg:mx-0">
-            G
-          </div>
+          <img src="/gerai-jasa-logo.svg" alt="Gerai Jasa" className="mx-auto mb-4 h-14 w-14 lg:mx-0" />
           <h1 className="font-heading text-2xl font-bold text-slate-900">Selamat datang 👋</h1>
           <p className="mt-1 text-sm text-slate-500">Masuk ke panel Admin atau Vendor Anda.</p>
         </div>

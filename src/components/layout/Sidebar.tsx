@@ -69,9 +69,7 @@ export function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
     <div className="flex h-full flex-col px-4 py-6 text-slate-300">
       {/* Logo */}
       <div className="mb-8 flex items-center gap-3 px-1">
-        <div className="gj-card flex h-10 w-10 items-center justify-center bg-indigo-600 text-lg font-bold text-white shadow ring-2 ring-amber-400/30">
-          G
-        </div>
+        <img src="/gerai-jasa-logo.svg" alt="Gerai Jasa" className="h-10 w-10 rounded-xl shadow ring-2 ring-amber-400/30" />
         <div>
           <p className="font-heading text-sm font-bold tracking-tight text-white">Gerai Jasa</p>
           <p className="text-[11px] uppercase tracking-widest text-amber-400/80">
